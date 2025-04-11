@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BingoLive+ | Página Inicial</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-outline {
+            border: 2px solid #7c3aed;
+            color: #7c3aed;
+            background: transparent;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            margin: 20px;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        /* Particles */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(124, 58, 237, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">BingoLive+</h1>
+            <p class="hero-subtitle">A melhor experiência de bingo online!</p>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="openModal('login')">Entrar</button>
+                <button class="btn btn-outline" onclick="openModal('register')">Cadastrar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content p-8">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modalContent">
+                <!-- Logo -->
+                <div class="flex justify-center mb-8">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-dice text-3xl text-pink-500"></i>
+                        <span class="text-3xl font-bold text-white">Bingo<span class="text-pink-500">Live+</span></span>
+                    </div>
+                </div>
+                
+                <!-- Tabs -->
+                <div class="flex mb-8 border-b border-gray-800">
+                    <button id="loginTab" class="flex-1 py-3 font-medium text-center text-pink-500 border-b-2 border-pink-500">
+                        Entrar
+                    </button>
+                    <button id="registerTab" class="flex-1 py-3 font-medium text-center text-gray-500">
+                        Cadastrar
+                    </button>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form">
+                    <form id="loginFormElement" onsubmit="return false;">
+                        <div class="mb-6">
+                            <label for="loginEmail" class="block text-gray-400 mb-2">E-mail ou Celular</label>
+                            <input type="text" id="loginEmail" name="email" class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="loginPassword" class="block text-gray-400 mb-2">Senha</label>
+                            <input type="password" id="loginPassword" name="password" class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" required>
+                            <div class="text-right mt-2">
+                                <a href="#" class="text-sm text-pink-500 hover:underline">Esqueceu a senha?</a>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary w-full text-white py-3 rounded-lg font-medium mb-6">
+                            Entrar
+                        </button>
+                    </form>
+                    
+                    <div class="divider mb-6 text-gray-500">ou entre com</div>
+                    
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <button class="social-btn text-white py-2 rounded-lg" onclick="socialLogin('google')">
+                            <i class="fab fa-google text-red-500"></i>
+                        </button>
+                        <button class="social-btn text-white py-2 rounded-lg" onclick="socialLogin('facebook')">
+                            <i class="fab fa-facebook-f text-blue-500"></i>
+                        </button>
+                        <button class="social-btn text-white py-2 rounded-lg" onclick="socialLogin('apple')">
+                            <i class="fab fa-apple"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="text-center text-gray-400">
+                        <span>Não tem uma conta? </span>
+                        <span id="showRegister" class="toggle-auth text-pink-500 cursor-pointer">Cadastre-se</span>
+                    </div>
+                </div>
+                
+                <!-- Register Form -->
+                <div id="registerForm" class="auth-form hidden">
+                    <form id="registerFormElement" onsubmit="return false;">
+                        <div class="mb-6">
+                            <label for="registerName" class="block text-gray-400 mb-2">Nome Completo</label>
+                            <input type="text" id="registerName" name="name" class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="registerEmail" class="block text-gray-400 mb-2">E-mail</label>
+                            <input type="email" id="registerEmail" name="email" class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="registerPhone" class="block text-gray-400 mb-2">Celular</label>
+                            <input type="tel" id="registerPhone" name="phone" class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" required pattern="\(\d{2}\) \d{5}-\d{4}" placeholder="(00) 00000-0000">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="registerPassword" class="block text-gray-400 mb-2">Senha</label>
+                            <input type="password" id="registerPassword" name="password" class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" required minlength="8">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="registerConfirmPassword" class="block text-gray-400 mb-2">Confirmar Senha</label>
+                            <input type="password" id="registerConfirmPassword" name="confirmPassword" class="input-field w-full px-4 py-3 rounded-lg focus:outline-none" required minlength="8">
+                        </div>
+                        
+                        <div class="flex items-center mb-6">
+                            <input type="checkbox" id="terms" name="terms" class="mr-2 rounded text-pink-500 focus:ring-pink-500" required>
+                            <label for="terms" class="text-gray-400 text-sm">
+                                Eu concordo com os <a href="#" class="text-pink-500 hover:underline">Termos de Uso</a> e <a href="#" class="text-pink-500 hover:underline">Política de Privacidade</a>
+                            </label>
+                        </div>
+                        
+                        <div class="flex items-center mb-6">
+                            <input type="checkbox" id="age" name="age" class="mr-2 rounded text-pink-500 focus:ring-pink-500" required>
+                            <label for="age" class="text-gray-400 text-sm">
+                                Confirmo que sou maior de 18 anos
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary w-full text-white py-3 rounded-lg font-medium mb-6">
+                            Criar Conta
+                        </button>
+                    </form>
+                    
+                    <div class="text-center text-gray-400">
+                        <span>Já tem uma conta? </span>
+                        <span id="showLogin" class="toggle-auth text-pink-500 cursor-pointer">Faça login</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Criar partículas
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 15 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                const duration = Math.random() * 10 + 10;
+                particle.style.animation = `float ${duration}s linear infinite`;
+                
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Inicializar partículas
+        createParticles();
+
+        // Funções do Modal
+        function openModal(type) {
+            const modal = document.getElementById('authModal');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            
+            if (type === 'login') {
+                loginTab.click();
+            } else {
+                registerTab.click();
+            }
+
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            // Inicializar os formulários
+            initializeAuthForms();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function initializeAuthForms() {
+            const loginForm = document.getElementById('loginFormElement');
+            const registerForm = document.getElementById('registerFormElement');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const loginFormContainer = document.getElementById('loginForm');
+            const registerFormContainer = document.getElementById('registerForm');
+            const showRegister = document.getElementById('showRegister');
+            const showLogin = document.getElementById('showLogin');
+
+            // Tab switching
+            loginTab.addEventListener('click', () => {
+                loginTab.classList.add('text-pink-500', 'border-b-2', 'border-pink-500');
+                loginTab.classList.remove('text-gray-500');
+                registerTab.classList.add('text-gray-500');
+                registerTab.classList.remove('text-pink-500', 'border-b-2', 'border-pink-500');
+                loginFormContainer.classList.remove('hidden');
+                registerFormContainer.classList.add('hidden');
+            });
+
+            registerTab.addEventListener('click', () => {
+                registerTab.classList.add('text-pink-500', 'border-b-2', 'border-pink-500');
+                registerTab.classList.remove('text-gray-500');
+                loginTab.classList.add('text-gray-500');
+                loginTab.classList.remove('text-pink-500', 'border-b-2', 'border-pink-500');
+                registerFormContainer.classList.remove('hidden');
+                loginFormContainer.classList.add('hidden');
+            });
+
+            showRegister.addEventListener('click', () => {
+                registerTab.click();
+            });
+
+            showLogin.addEventListener('click', () => {
+                loginTab.click();
+            });
+
+            // Formatação do telefone
+            const registerPhone = document.getElementById('registerPhone');
+            registerPhone.addEventListener('input', () => {
+                let value = registerPhone.value.replace(/\D/g, '');
+                if (value.length <= 11) {
+                    value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+                }
+                registerPhone.value = value;
+            });
+
+            // Login form submission
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                try {
+                    const submitButton = loginForm.querySelector('button[type="submit"]');
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Entrando...';
+
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: loginEmail.value,
+                            password: loginPassword.value
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        showMessage('Login realizado com sucesso!');
+                        window.location.href = '/dashboard';
+                    } else {
+                        showMessage(data.message || 'Erro ao fazer login', true);
+                    }
+                } catch (error) {
+                    console.error('Erro:', error);
+                    showMessage('Erro ao conectar com o servidor', true);
+                } finally {
+                    const submitButton = loginForm.querySelector('button[type="submit"]');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Entrar';
+                }
+            });
+
+            // Register form submission
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                if (registerPassword.value !== registerConfirmPassword.value) {
+                    showMessage('As senhas não coincidem', true);
+                    return;
+                }
+
+                try {
+                    const submitButton = registerForm.querySelector('button[type="submit"]');
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Cadastrando...';
+
+                    const response = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: registerName.value,
+                            email: registerEmail.value,
+                            phone: registerPhone.value,
+                            password: registerPassword.value,
+                            terms: terms.checked.toString(),
+                            age: age.checked.toString()
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        showMessage('Cadastro realizado com sucesso!');
+                        registerForm.reset();
+                        loginTab.click();
+                    } else {
+                        showMessage(data.message || 'Erro ao realizar cadastro', true);
+                    }
+                } catch (error) {
+                    console.error('Erro:', error);
+                    showMessage('Erro ao conectar com o servidor', true);
+                } finally {
+                    const submitButton = registerForm.querySelector('button[type="submit"]');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Criar Conta';
+                }
+            });
+        }
+
+        // Função para mostrar mensagens
+        function showMessage(message, isError = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            messageDiv.style.position = 'fixed';
+            messageDiv.style.top = '20px';
+            messageDiv.style.left = '50%';
+            messageDiv.style.transform = 'translateX(-50%)';
+            messageDiv.style.padding = '1rem';
+            messageDiv.style.borderRadius = '0.5rem';
+            messageDiv.style.backgroundColor = isError ? '#fee2e2' : '#dcfce7';
+            messageDiv.style.color = isError ? '#dc2626' : '#16a34a';
+            messageDiv.style.zIndex = '9999';
+            
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        // Verificar se já está autenticado
+        const token = localStorage.getItem('token');
+        if (token) {
+            window.location.href = '/dashboard';
+        }
+
+        // Função para login social
+        async function socialLogin(provider) {
+            try {
+                // Por enquanto apenas mostra mensagem informativa
+                showMessage(`Login com ${provider} será implementado em breve`, false);
+            } catch (error) {
+                console.error('Erro no login social:', error);
+                showMessage('Erro ao realizar login social', true);
+            }
+        }
+    </script>
+</body>
+</html>

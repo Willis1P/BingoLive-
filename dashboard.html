@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BingoLive+ | Dashboard</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-slate-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-dice text-2xl text-pink-500"></i>
+                        <span class="text-2xl font-bold text-white">Bingo<span class="text-pink-500">Live+</span></span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span id="userName" class="mr-4 text-gray-300"></span>
+                    <button onclick="logout()" class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors">
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-slate-800 rounded-lg shadow-xl p-6">
+            <h1 class="text-2xl font-bold mb-4">Bem-vindo ao BingoLive+</h1>
+            <p class="text-gray-300">Seu painel de controle está em construção.</p>
+        </div>
+    </main>
+
+    <script>
+        // Verificar se o usuário está logado
+        async function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if (!token || !user) {
+                window.location.href = '/';
+                return;
+            }
+
+            try {
+                // Verificar se o token é válido
+                const response = await fetch('http://localhost:3000/api/user-info', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Token inválido');
+                }
+
+                const userData = await response.json();
+                // Atualizar dados do usuário
+                document.getElementById('userName').textContent = userData.name;
+            } catch (error) {
+                console.error('Erro na autenticação:', error);
+                logout();
+            }
+        }
+
+        // Função de logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        }
+
+        // Verificar autenticação ao carregar a página
+        checkAuth();
+
+        // Verificar autenticação periodicamente
+        setInterval(checkAuth, 60000); // Verificar a cada minuto
+    </script>
+</body>
+</html> 
