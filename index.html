@@ -150,23 +150,133 @@
             border-radius: 50%;
             pointer-events: none;
         }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Content Styles */
+        .main-content {
+            margin-top: 5rem;
+            padding: 2rem;
+        }
+
+        .features-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #7c3aed;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="/" class="logo">
+                <i class="fas fa-dice text-3xl text-pink-500"></i>
+                <span class="text-2xl font-bold text-white">Bingo<span class="text-pink-500">Live+</span></span>
+            </a>
+            <div class="nav-buttons">
+                <button class="btn btn-outline" onclick="openModal('login')">Entrar</button>
+                <button class="btn btn-primary" onclick="openModal('register')">Cadastrar</button>
+            </div>
+        </div>
+    </header>
+
     <!-- Particles Background -->
     <div class="particles" id="particles"></div>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">BingoLive+</h1>
-            <p class="hero-subtitle">A melhor experiência de bingo online!</p>
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="openModal('login')">Entrar</button>
-                <button class="btn btn-outline" onclick="openModal('register')">Cadastrar</button>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">BingoLive+</h1>
+                <p class="hero-subtitle">A melhor experiência de bingo online!</p>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">
+                    Jogue bingo em tempo real com pessoas de todo o mundo. 
+                    Prêmios incríveis, chat ao vivo e muito mais!
+                </p>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="text-3xl font-bold text-center mb-4">Por que escolher o BingoLive+?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-users feature-icon"></i>
+                    <h3 class="text-xl font-bold mb-2">Comunidade Ativa</h3>
+                    <p class="text-gray-400">Jogue com milhares de jogadores online em tempo real</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <h3 class="text-xl font-bold mb-2">100% Seguro</h3>
+                    <p class="text-gray-400">Sistema verificado e certificado para sua segurança</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-gift feature-icon"></i>
+                    <h3 class="text-xl font-bold mb-2">Prêmios Incríveis</h3>
+                    <p class="text-gray-400">Ganhe prêmios exclusivos e bônus especiais</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Modal -->
     <div id="authModal" class="modal">
