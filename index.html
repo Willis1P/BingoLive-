@@ -445,6 +445,17 @@
                     submitButton.disabled = true;
                     submitButton.textContent = 'Cadastrando...';
 
+                    // Verificar se os termos e idade foram aceitos
+                    const terms = document.getElementById('terms');
+                    const age = document.getElementById('age');
+
+                    if (!terms.checked || !age.checked) {
+                        showMessage('Você precisa aceitar os termos e confirmar sua idade', true);
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Criar Conta';
+                        return;
+                    }
+
                     const response = await fetch('/api/auth/register', {
                         method: 'POST',
                         headers: {
@@ -467,7 +478,10 @@
                         registerForm.reset();
                         loginTab.click();
                     } else {
-                        showMessage(data.message || 'Erro ao realizar cadastro', true);
+                        const errorMessage = data.errors ? 
+                            data.errors.map(err => err.msg).join('\n') : 
+                            data.message || 'Erro ao realizar cadastro';
+                        showMessage(errorMessage, true);
                     }
                 } catch (error) {
                     console.error('Erro:', error);
